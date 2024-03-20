@@ -4,39 +4,31 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
 
 public class AlturaAlumnoTest {
 
-//    @Test
-//    void menuTest(){
-//        // Creamos, la variable que queremos introducir, en forma de String con un salto de línea
+    @Test
+    void menuTest(){
+//        // Creamos la variable que queremos introducir, en forma de String
+//        // con un salto de línea por cada entrada de teclado que queremos hacer,
 //        // para tener en cuenta la limpieza del Buffer que se produce al leer el dato por teclado
-//        String numIntrod = "1\n";
+//        String numIntrod = "-8\n1\n3\n6\n25\n";
 //        // Creamos un objeto con el constructor de ´´ByteArrayInputStream`` y metiéndole
 //        // el ´´numIntrod`` en forma de bytes
 //        InputStream entradaPorTeclado = new ByteArrayInputStream(numIntrod.getBytes());
 //        // Redirigimos la entrada por teclado hacia nuestro objeto ´´entradaPorTeclado``
 //        System.setIn(entradaPorTeclado);
+//
 //        // Comprobamos que obtenemos el valor correcto
+//        assertEquals(-8,AlturaAlumno.menu());
 //        assertEquals(1,AlturaAlumno.menu());
-//
-//        numIntrod = "3\n";
-//        entradaPorTeclado = new ByteArrayInputStream(numIntrod.getBytes());
-//        System.setIn(entradaPorTeclado);
 //        assertEquals(3,AlturaAlumno.menu());
-//
-//        numIntrod = "6\n";
-//        entradaPorTeclado = new ByteArrayInputStream(numIntrod.getBytes());
-//        System.setIn(entradaPorTeclado);
 //        assertEquals(6,AlturaAlumno.menu());
-//
-//        numIntrod = "25\n";
-//        entradaPorTeclado = new ByteArrayInputStream(numIntrod.getBytes());
-//        System.setIn(entradaPorTeclado);
 //        assertEquals(25,AlturaAlumno.menu());
-//    }
+    }
 
     @Test
     void anyadeNombreTest1(){
@@ -68,19 +60,19 @@ public class AlturaAlumnoTest {
 
     }
 
-//    @Test
-//    void anyadeNombreTest2(){
-//        final String[] array = new String[10];
-//        int longInicial = array.length;
-//
-//        array[0] = "Jose";
-//        String nombreNuevo = "María";
-//
-//        String[] arrayActual = AlturaAlumno.añadeNombre(array,nombreNuevo);
-//
-//        assertEquals(nombreNuevo,arrayActual[longInicial-1]);
-//
-//    }
+    @Test
+    void anyadeNombreTest2(){
+        final String[] arrayOrig = new String[10];
+        int longInicial = arrayOrig.length;
+
+        arrayOrig[0] = "Jose";
+        String nombreNuevo = "María";
+
+        String[] arrayAmpliado = AlturaAlumno.añadeNombre(arrayOrig,nombreNuevo);
+
+        assertEquals(nombreNuevo,arrayAmpliado[longInicial]);
+
+    }
 
     // Hacemos este test antes que el de ´´anyadeAltura`` porque dicho método
     // tiene dentro este método
@@ -153,15 +145,68 @@ public class AlturaAlumnoTest {
     }
 
     @Test
-    void buscaNombreTest(){
+    void buscaNombreTestEncontrado(){
+        // When
         String[] arrayOriginal = {"Sandra","Roberto","María","David"};
-        String nomBuscDentro1 = "Sandra", nomBuscDentro2 = "David",
-                nomBuscFuera1 = "Juan";
+        String nomBusc = "Sandra";
 
+        // Do & Then
         // Comprobación de que el índice obtenido es el correcto
-        assertEquals(AlturaAlumno.buscaNombre(arrayOriginal,nomBuscDentro1),0);
-        assertEquals(AlturaAlumno.buscaNombre(arrayOriginal,nomBuscDentro2),3);
-        assertEquals(AlturaAlumno.buscaNombre(arrayOriginal,nomBuscFuera1),-1);
+        assertEquals(0,AlturaAlumno.buscaNombre(arrayOriginal,nomBusc));
+    }
+
+    @Test
+    void buscaNombreTestNoEncontrado(){
+        // When
+        String[] arrayOriginal = {"Sandra","Roberto","María","David"};
+        String nomBusc = "Pepe";
+
+        // Do & Then
+        // Comprobación de que el índice obtenido es el correcto
+        assertEquals(-1,AlturaAlumno.buscaNombre(arrayOriginal,nomBusc));
+    }
+
+    @Test
+    void buscaNombreTestArrayTam0(){
+        // When
+        String[] arrayOriginal = new String[0];
+        String nomBusc = "Andrés";
+
+        // Do & Then
+        // Comprobación de que el índice obtenido es el correcto
+        assertEquals(-1,AlturaAlumno.buscaNombre(arrayOriginal,nomBusc));
+    }
+
+    @Test
+    void buscaNombreTestNombreVacioONula(){
+        // When
+        String[] arrayOriginal = {"Sandra","Roberto","María","David"};
+        String nomBusc = "";
+
+        // Do & Then
+        // Comprobación de que el índice obtenido es el correcto
+        assertEquals(-1,AlturaAlumno.buscaNombre(arrayOriginal,nomBusc));
+        assertEquals(-1,AlturaAlumno.buscaNombre(arrayOriginal,null));
+    }
+
+    @Test
+    void mostrarTestFuncCorrecto(){
+        // When
+        String[] nombres = {"Sandra","Roberto","María","David"};
+        double[] alturas = {5.9,1.47,2.9,32.41};
+
+        // Do & Then
+        assertDoesNotThrow(() -> {AlturaAlumno.mostrar(nombres,alturas);});
+    }
+
+    @Test
+    void mostrarTestFuncIncorrecto(){
+        // When
+        String[] nombres = {"Sandra","Roberto","María","David"};
+        double[] alturas = {5.9,1.47,2.9};
+
+        // Do & Then
+        assertThrows(ArrayIndexOutOfBoundsException.class, () -> {AlturaAlumno.mostrar(nombres,alturas);});
     }
 
     @Test
